@@ -20,6 +20,7 @@ class CreateUsers1602158114027 implements MigrationInterface {
           {
             name: 'email',
             type: 'varchar',
+            isUnique: true,
           },
           {
             name: 'password',

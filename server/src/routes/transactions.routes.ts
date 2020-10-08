@@ -5,20 +5,27 @@ import multer from 'multer';
 // handle csv
 import uploadConfig from '../config/upload';
 
+import ensureAuth from '../middleware/ensureAuth';
+
 import TransactionsRepository from '../repositories/TransactionsRepository';
 import CreateTransactionService from '../services/CreateTransactionService';
 import DeleteTransactionService from '../services/DeleteTransactionService';
 import ImportTransactionsService from '../services/ImportTransactionsService';
 
 const transactionsRouter = Router();
+transactionsRouter.use(ensureAuth);
 
 const upload = multer(uploadConfig);
 
 transactionsRouter.get('/', async (request, response) => {
+  const { id: user_id } = request.user;
+
   const transactionRepository = getCustomRepository(TransactionsRepository);
 
-  const transactions = await transactionRepository.find();
-  const balance = await transactionRepository.getBalance();
+  const transactions = await transactionRepository.find({
+    where: { user_id },
+  });
+  const balance = await transactionRepository.getBalance(user_id);
 
   const transactionOverview = {
     transactions,
@@ -29,6 +36,8 @@ transactionsRouter.get('/', async (request, response) => {
 });
 
 transactionsRouter.post('/', async (request, response) => {
+  const { id: user_id } = request.user;
+
   const { title, value, type, category } = request.body;
 
   const createTransacitionService = new CreateTransactionService();
@@ -38,6 +47,7 @@ transactionsRouter.post('/', async (request, response) => {
     value,
     type,
     category,
+    user_id,
   });
 
   // if we get here, the data received is ok to send back as requested
@@ -66,11 +76,14 @@ transactionsRouter.post(
   '/import',
   upload.single('file'),
   async (request, response) => {
+    const { id: user_id } = request.user;
+
     const importTransactionsService = new ImportTransactionsService();
 
     const transactions = await importTransactionsService.execute(
       request.file.filename,
       request.file.mimetype,
+      user_id,
     );
 
     return response.status(201).json(transactions);

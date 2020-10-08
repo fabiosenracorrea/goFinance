@@ -12,7 +12,6 @@ class AddUsersLinkToTransactions1602158981307 implements MigrationInterface {
       new TableColumn({
         name: 'user_id',
         type: 'uuid',
-        isNullable: true,
       }),
     );
 
