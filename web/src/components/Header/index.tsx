@@ -8,9 +8,13 @@ import Logo from '../../assets/logo.svg';
 
 interface HeaderProps {
   size?: 'small' | 'large';
+  auth?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ size = 'large' }: HeaderProps) => {
+const Header: React.FC<HeaderProps> = ({
+  size = 'large',
+  auth,
+}: HeaderProps) => {
   const [currentPage, setCurrentPage] = useState('');
 
   const { path } = useRouteMatch();
@@ -23,21 +27,29 @@ const Header: React.FC<HeaderProps> = ({ size = 'large' }: HeaderProps) => {
     <Container size={size}>
       <header>
         <img src={Logo} alt="GoFinances" />
-        <nav>
-          <>
-            <div className={currentPage === '/' ? 'current' : undefined}>
-              <Link to="/">Listagem</Link>
-            </div>
+        {!auth && (
+          <nav>
+            <>
+              <div
+                className={currentPage === '/dashboard' ? 'current' : undefined}
+              >
+                <Link to="/">Listagem</Link>
+              </div>
 
-            <div className={currentPage === '/create' ? 'current' : undefined}>
-              <Link to="/create">Criar</Link>
-            </div>
+              <div
+                className={currentPage === '/create' ? 'current' : undefined}
+              >
+                <Link to="/create">Criar</Link>
+              </div>
 
-            <div className={currentPage === '/import' ? 'current' : undefined}>
-              <Link to="/import">Importar</Link>
-            </div>
-          </>
-        </nav>
+              <div
+                className={currentPage === '/import' ? 'current' : undefined}
+              >
+                <Link to="/import">Importar</Link>
+              </div>
+            </>
+          </nav>
+        )}
       </header>
     </Container>
   );

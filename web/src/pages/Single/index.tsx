@@ -1,6 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 
 import Header from '../../components/Header';
+import Button from '../../components/Button';
 
 import { Container, Title, SingleTransactionForm, Loading } from './styles';
 
@@ -130,7 +131,7 @@ const Single: React.FC = () => {
           </div>
 
           <div className="button-container">
-            <button type="submit">Salvar</button>
+            <Button type="submit">Salvar</Button>
             {loading && <Loading className="loader" />}
           </div>
 
