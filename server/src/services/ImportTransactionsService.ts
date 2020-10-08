@@ -10,7 +10,11 @@ import Transaction from '../models/Transaction';
 import AppError from '../errors/AppError';
 
 class ImportTransactionsService {
-  async execute(filename: string, type: string): Promise<Transaction[]> {
+  async execute(
+    filename: string,
+    type: string,
+    user_id: string,
+  ): Promise<Transaction[]> {
     const fileUploaded = path.join(uploadConfig.directory, filename);
 
     if (type !== 'text/csv') {
@@ -31,6 +35,8 @@ class ImportTransactionsService {
     const savedTransactions = [];
 
     for await (const transaction of transactions) {
+      transaction.user_id = user_id;
+
       const savedTransaction = await createTransactionService.execute(
         transaction,
       );

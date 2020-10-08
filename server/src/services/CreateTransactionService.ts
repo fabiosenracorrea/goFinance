@@ -12,6 +12,7 @@ interface RequestTDO {
   value: number;
   category: string;
   type: 'outcome' | 'income';
+  user_id: string;
 }
 
 class CreateTransactionService {
@@ -20,6 +21,7 @@ class CreateTransactionService {
     value,
     category,
     type,
+    user_id,
   }: RequestTDO): Promise<Transaction> {
     if (!title || !value || !category || !type) {
       throw new AppError('Invalid transaction options');
@@ -33,7 +35,7 @@ class CreateTransactionService {
     const transactionRepository = getCustomRepository(TransactionRepository);
 
     if (type === 'outcome') {
-      const { total } = await transactionRepository.getBalance();
+      const { total } = await transactionRepository.getBalance(user_id);
 
       if (total < value) {
         throw new AppError('Unsufficient account balance');
@@ -61,6 +63,7 @@ class CreateTransactionService {
       value,
       type,
       category_id,
+      user_id,
     });
 
     await transactionRepository.save(transaction);
