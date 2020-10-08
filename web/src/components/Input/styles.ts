@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 interface ContainerProps {
   hasFocus: boolean;
   hasText: boolean;
+  hasError: boolean;
 }
 
 export const Container = styled.div<ContainerProps>`
@@ -20,6 +21,12 @@ export const Container = styled.div<ContainerProps>`
   svg {
     color: #232129;
   }
+
+  ${({ hasError }) =>
+    hasError &&
+    css`
+      border-color: #c53030;
+    `}
 
   ${({ hasFocus }) =>
     hasFocus &&
