@@ -27,7 +27,7 @@ const Input: React.FC<CustomInput> = ({ name, icon: Icon, ...rest }) => {
     registerField({
       name: fieldName,
       ref: inputRef.current,
-      path: '.value',
+      path: 'value',
     });
   }, [registerField, fieldName]);
 

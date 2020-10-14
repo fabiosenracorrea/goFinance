@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-
 import { Link, useRouteMatch } from 'react-router-dom';
+import { FiLogOut } from 'react-icons/fi';
+
+import { useAuth } from '../../hooks/auth';
 
 import { Container } from './styles';
 
@@ -19,6 +21,8 @@ const Header: React.FC<HeaderProps> = ({
 
   const { path } = useRouteMatch();
 
+  const { signOut } = useAuth();
+
   useEffect(() => {
     setCurrentPage(path);
   }, [path]);
@@ -33,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({
               <div
                 className={currentPage === '/dashboard' ? 'current' : undefined}
               >
-                <Link to="/">Listagem</Link>
+                <Link to="/dashboard">Listagem</Link>
               </div>
 
               <div
@@ -47,6 +51,10 @@ const Header: React.FC<HeaderProps> = ({
               >
                 <Link to="/import">Importar</Link>
               </div>
+
+              <button type="button" onClick={signOut}>
+                <FiLogOut size={22} />
+              </button>
             </>
           </nav>
         )}

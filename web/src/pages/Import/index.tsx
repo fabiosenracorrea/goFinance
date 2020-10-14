@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import filesize from 'filesize';
+import { useAuth } from '../../hooks/auth';
 
 import Header from '../../components/Header';
 import FileList from '../../components/FileList';
@@ -24,6 +25,8 @@ const Import: React.FC = () => {
   const [uploadError, setUploadError] = useState(false);
   const history = useHistory();
 
+  const { token } = useAuth();
+
   async function handleUpload(): Promise<void> {
     const mappedFiles = await Promise.all(
       uploadedFiles.map(async file => {
@@ -34,7 +37,9 @@ const Import: React.FC = () => {
         data.append('file', file.file);
 
         try {
-          await api.post('/transactions/import', data);
+          await api.post('/transactions/import', data, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
           const uploadedFile = { ...file, uploaded: true };
           return uploadedFile;
         } catch (err) {
