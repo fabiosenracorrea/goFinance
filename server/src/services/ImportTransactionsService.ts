@@ -9,6 +9,14 @@ import CreateTransactionService from './CreateTransactionService';
 import Transaction from '../models/Transaction';
 import AppError from '../errors/AppError';
 
+interface TransactionTDO {
+  title: string;
+  value: number;
+  category: string;
+  type: 'outcome' | 'income';
+  user_id: string;
+}
+
 class ImportTransactionsService {
   async execute(
     filename: string,
@@ -23,9 +31,9 @@ class ImportTransactionsService {
     }
 
     // solution found on https://stackoverflow.com/a/52199182/14115629
-    const transactions = await csvtojson({
+    const transactions = (await csvtojson({
       trim: true,
-    }).fromFile(fileUploaded);
+    }).fromFile(fileUploaded)) as TransactionTDO[];
 
     // all income transactions first!
     transactions.sort((a, b) => a.type.localeCompare(b.type));
@@ -35,6 +43,15 @@ class ImportTransactionsService {
     const savedTransactions = [];
 
     for await (const transaction of transactions) {
+      if (
+        !transaction.category ||
+        !transaction.title ||
+        !transaction.type ||
+        !transaction.value
+      ) {
+        continue;
+      }
+
       transaction.user_id = user_id;
 
       const savedTransaction = await createTransactionService.execute(
