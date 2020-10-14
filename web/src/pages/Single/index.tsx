@@ -1,6 +1,9 @@
 import React, { useState, FormEvent } from 'react';
 
 import Header from '../../components/Header';
+import Button from '../../components/Button';
+
+import { useAuth } from '../../hooks/auth';
 
 import { Container, Title, SingleTransactionForm, Loading } from './styles';
 
@@ -21,6 +24,8 @@ const Single: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const { token } = useAuth();
+
   async function handleFormSubmit(
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> {
@@ -31,12 +36,18 @@ const Single: React.FC = () => {
     try {
       setLoading(true);
 
-      await api.post('/transactions', {
-        title,
-        value,
-        type,
-        category,
-      });
+      await api.post(
+        '/transactions',
+        {
+          title,
+          value,
+          type,
+          category,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       setLoading(false);
       setErrorMsg('');
@@ -130,7 +141,7 @@ const Single: React.FC = () => {
           </div>
 
           <div className="button-container">
-            <button type="submit">Salvar</button>
+            <Button type="submit">Salvar</Button>
             {loading && <Loading className="loader" />}
           </div>
 

@@ -26,6 +26,17 @@ export const Container = styled.div<ContainerProps>`
 
     nav {
       display: flex;
+      align-items: center;
+
+      button {
+        background: none;
+        border: none;
+
+        svg {
+          color: #ff872c;
+          margin-left: 12px;
+        }
+      }
 
       div {
         padding: 0 0 10px;

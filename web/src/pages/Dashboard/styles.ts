@@ -55,6 +55,8 @@ export const Card = styled.div`
 export const TableContainer = styled.section`
   margin-top: 64px;
 
+  overflow-x: auto;
+
   table {
     width: 100%;
     border-spacing: 0 8px;
