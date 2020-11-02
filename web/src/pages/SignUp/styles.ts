@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import backgroundImg from '../../assets/app-background.jpg';
 
@@ -6,21 +6,36 @@ export const Container = styled.div`
   height: 100vh;
   width: 100vw;
 
+  background: #5636d3;
+  overflow: hidden;
+
   display: flex;
   align-items: stretch;
+`;
+
+const appearFromRight = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 `;
 
 export const Content = styled.div`
   width: 100%;
   max-width: 700px;
 
-  background: #5636d3;
   color: white;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  animation: ${appearFromRight} 1s;
 
   form {
     max-width: 340px;
