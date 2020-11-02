@@ -52,7 +52,7 @@ With the main technologies on each being:
 
 Check out 2 gifs of the application:
 
-![goFinance login-register pages](./project_login.gif)
+![goFinance login-register pages](./project-login.gif)
 
 ![goFinance before creation implemented](./project_overview.gif)
 
